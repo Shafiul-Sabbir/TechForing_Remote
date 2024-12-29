@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from .models import CustomUser
 from .serializers import CustomUserSerializer
+from django.views.decorators.csrf import csrf_exempt
 
 class CustomUserViewSet(viewsets.ModelViewSet):
     """
@@ -12,7 +13,8 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     """
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-
+    
+    @csrf_exempt
     @action(detail=False, methods=['post'], url_path='register', url_name='register')
     def register(self, request):
         """
@@ -29,6 +31,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @csrf_exempt
     @action(detail=False, methods=['post'], url_path='login', url_name='login')
     def login(self, request):
         """
@@ -57,9 +60,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
                 'error': 'Invalid username or password.'
             }, status=status.HTTP_401_UNAUTHORIZED)
 
-    
-
-
+# I have tested with this users. You can use them as testing purpose.
 
 # username : sabbir
 # email : shafiulsabbir95@gmail.com
@@ -80,6 +81,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
 # username : tiash
 # email : tiash@gmail.com
 # password : 1234
+
 
 
 
